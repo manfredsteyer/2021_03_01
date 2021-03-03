@@ -1,6 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
 import {FlightBookingComponent} from './flight-booking.component';
@@ -13,14 +13,16 @@ import { StoreModule } from '@ngrx/store';
 import * as fromFlightBooking from './+state/flight-booking.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { FlightBookingEffects } from './+state/flight-booking.effects';
+import { FlightTypeaheadComponent } from './flight-typeahead/flight-typeahead.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     SharedModule.forChild(),
     RouterModule.forChild(FLIGHT_BOOKING_ROUTES),
-    
+
     StoreModule.forFeature(fromFlightBooking.flightBookingFeatureKey, fromFlightBooking.reducer),
     EffectsModule.forFeature([FlightBookingEffects])
   ],
@@ -29,7 +31,8 @@ import { FlightBookingEffects } from './+state/flight-booking.effects';
     FlightCardComponent,
     PassengerSearchComponent,
     FlightEditComponent,
-    FlightBookingComponent
+    FlightBookingComponent,
+    FlightTypeaheadComponent
   ],
   providers: [],
   exports: [

@@ -1,0 +1,38 @@
+<!-- <div *ngIf="{
+  timer: timer$ | async
+} as state">
+  <p>Timer 1: {{ state.timer }}</p>
+  <p>Timer 2: {{ state.timer }}</p>
+</div>
+ -->
+
+<<ng-container *ngIf="{
+  flights: flights$ | async
+} as state">
+  <div class="card">
+    <div class="header">
+      <h1 class="title">Flight Typeahead</h1>
+    </div>
+
+    <div class="content">
+
+      <div class="control-group">
+          <label>City</label>
+          <input [formControl]="control" class="form-control">
+      </div>
+
+      <div *ngIf="loading">Loading ...</div>
+
+    </div>
+  </div>
+
+  <table class="table table-striped">
+    <tr *ngFor="let f of state.flights">
+        <td>{{f.id}}</td>
+        <td>{{f.from}}</td>
+        <td>{{f.to}}</td>
+        <td>{{f.date | date:'dd.MM.yyyy HH:mm'}}</td>
+    </tr>
+  </table>
+
+</ng-container>
