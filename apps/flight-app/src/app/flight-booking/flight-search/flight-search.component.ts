@@ -2,6 +2,12 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import {Component, OnInit} from '@angular/core';
 import {FlightService} from '@flight-workspace/flight-lib';
+import { Actions, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { first } from 'rxjs/operators';
+import { flightsLoaded, loadFlights, loadFlightsError, updateFlight } from '../+state/flight-booking.actions';
+import { FlightBookingAppStateSlice, flightBookingFeatureKey } from '../+state/flight-booking.reducer';
+import { selectFlights, selectFlights2 } from '../+state/flight-booking.selectors';
 
 @Component({
   selector: 'flight-search',
@@ -24,8 +30,18 @@ export class FlightSearchComponent implements OnInit {
     5: true
   };
 
+  flights$ = this.store.select(selectFlights2);
+
   constructor(
+    private actions$: Actions,
+    private store: Store<FlightBookingAppStateSlice>,
     private flightService: FlightService) {
+
+      actions$.pipe(
+        ofType(loadFlightsError)).subscribe(a => {
+          // show toast, etc.
+        });
+
   }
 
   ngOnInit() {
@@ -34,12 +50,19 @@ export class FlightSearchComponent implements OnInit {
   search(): void {
     if (!this.from || !this.to) return;
 
-    this.flightService
-      .load(this.from, this.to, this.urgent);
+    this.store.dispatch(loadFlights({from: this.from, to: this.to, urgent: this.urgent}));
+    
   }
 
   delay(): void {
-    this.flightService.delay();
+
+    this.flights$.pipe(first()).subscribe(f => {
+
+      const flight = {...f[0], date: new Date().toISOString()};
+      this.store.dispatch(updateFlight({flight}))
+
+    })
+
   }
 
 }
