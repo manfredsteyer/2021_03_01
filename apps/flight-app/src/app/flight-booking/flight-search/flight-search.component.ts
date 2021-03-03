@@ -49,6 +49,10 @@ export class FlightSearchComponent implements OnInit {
     5: true
   };
 
+  /**
+   * Updater
+   */
+
   addFilter = this.localStore.updater(
     (state, filter: Filter) => ({
       ...state,
@@ -66,6 +70,10 @@ export class FlightSearchComponent implements OnInit {
     })
   );
 
+  /**
+   * Selectors
+   */
+
   selectFilters$ = this.localStore.select(
     // Selectors
     // Projector
@@ -75,6 +83,10 @@ export class FlightSearchComponent implements OnInit {
   selectCurrentFilter$ = this.localStore.select(
     state => state.filters[state.filters.length - 1]
   );
+
+  /**
+   * Effects
+   */
 
   searchFlights = this.localStore.effect(
     (filterChange$: Observable<Filter>) =>
